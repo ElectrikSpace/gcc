@@ -132,7 +132,8 @@ extern rtx default_gen_rtx_complex (machine_mode mode, rtx real_part,
 				    rtx imag_part);
 extern rtx default_read_complex_part (rtx cplx, complex_part_t part);
 extern void default_write_complex_part (rtx cplx, rtx val,
-					complex_part_t part);
+					complex_part_t part,
+					bool undefined_p);
 
 /* OpenACC hooks.  */
 extern bool default_goacc_validate_dims (tree, int [], int, unsigned);

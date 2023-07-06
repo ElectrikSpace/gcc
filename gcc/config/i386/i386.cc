@@ -23636,13 +23636,13 @@ x86_gen_rtx_complex (machine_mode mode, rtx real_part, rtx imag_part)
   if (real_part)
     {
       gcc_assert (imode == GET_MODE (real_part));
-      write_complex_part (complex_reg, real_part, REAL_P);
+      write_complex_part (complex_reg, real_part, REAL_P, false);
     }
 
   if (imag_part)
     {
       gcc_assert (imode == GET_MODE (imag_part));
-      write_complex_part (complex_reg, imag_part, IMAG_P);
+      write_complex_part (complex_reg, imag_part, IMAG_P, false);
     }
 
   return complex_reg;
@@ -23737,7 +23737,7 @@ x86_read_complex_part (rtx cplx, complex_part_t part)
 }
 
 static void
-x86_write_complex_part (rtx cplx, rtx val, complex_part_t part)
+x86_write_complex_part (rtx cplx, rtx val, complex_part_t part, bool undefined_p)
 {
   machine_mode cmode;
   scalar_mode imode;
@@ -23779,7 +23779,7 @@ x86_write_complex_part (rtx cplx, rtx val, complex_part_t part)
            {
              rtx temp_reg = gen_reg_rtx (temp_mode);
              store_bit_field (temp_reg, GET_MODE_BITSIZE (temp_mode), 0, 0,
-                              0, GET_MODE (val), val, false);
+			      0, GET_MODE (val), val, false, undefined_p);
              emit_move_insn (cplx,
                              simplify_gen_subreg (cmode, temp_reg, temp_mode,
                                                   0));
@@ -23788,21 +23788,24 @@ x86_write_complex_part (rtx cplx, rtx val, complex_part_t part)
            {
              /* write real part and imag part separetly */
              gcc_assert (GET_CODE (val) == CONST_VECTOR);
-             write_complex_part (cplx, const_vector_elt (val, 0), REAL_P);
-             write_complex_part (cplx, const_vector_elt (val, 1), IMAG_P);
+	     write_complex_part (cplx, const_vector_elt (val, 0), REAL_P, false);
+	     write_complex_part (cplx, const_vector_elt (val, 1), IMAG_P, false);
            }
        }
       else
        write_complex_part (cplx,
                            const_vector_elt (val,
                                              ((part == REAL_P) ? 0 : 1)),
-                           part);
+			   part, false);
       return;
     }
 
-  if ((part == BOTH_P) && !MEM_P (cplx))
+  if ((part == BOTH_P) && !MEM_P (cplx)
+      /*&& (optab_handler (mov_optab, cmode) != CODE_FOR_nothing)*/)
     {
-      emit_move_insn (cplx, val);
+      write_complex_part (cplx, read_complex_part(cplx, REAL_P), REAL_P, undefined_p);
+      write_complex_part (cplx, read_complex_part(cplx, IMAG_P), IMAG_P, undefined_p);
+      //emit_move_insn (cplx, val);
       return;
     }
 
@@ -23875,7 +23878,7 @@ x86_write_complex_part (rtx cplx, rtx val, complex_part_t part)
     }
 
   store_bit_field (cplx, ibitsize, (part == IMAG_P) ? ibitsize : 0, 0, 0,
-                  imode, val, false);
+		   imode, val, false, undefined_p);
 }
 
 /* If AVX is enabled then try vectorizing with both 256bit and 128bit

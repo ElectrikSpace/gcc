@@ -3645,6 +3645,7 @@ set_storage_via_setmem (rtx object, rtx size, rtx val, unsigned int align,
    the real part if IMAG_P is false, and the imaginary part if its true.
    If UNDEFINED_P then the value in CPLX is currently undefined.  */
 
+void
 write_complex_part (rtx cplx, rtx val, complex_part_t part, bool undefined_p)
 {
   targetm.write_complex_part (cplx, val, part, undefined_p);
@@ -3876,7 +3877,7 @@ emit_move_complex (machine_mode mode, rtx x, rtx y)
   scalar_int_mode imode;
   if (!int_mode_for_mode (mode).exists (&imode))
     try_int = false;
-  if (GET_MODE_CLASS (mode) == MODE_COMPLEX_FLOAT
+  else if (GET_MODE_CLASS (mode) == MODE_COMPLEX_FLOAT
       && optab_handler (mov_optab, GET_MODE_INNER (mode)) != CODE_FOR_nothing
       && optab_handler (mov_optab, imode) == CODE_FOR_nothing
       && !(REG_P (x) && HARD_REGISTER_P (x))
@@ -11039,7 +11040,7 @@ expand_expr_real_1 (tree exp, rtx target, machine_mode tmode,
 	      op0 =
 		expand_expr (TREE_COMPLEX_BOTH_PARTS (exp), original_target,
 			     mode, EXPAND_NORMAL);
-	      write_complex_part (original_target, op0, BOTH_P);
+	      write_complex_part (original_target, op0, BOTH_P, false);
 	    }
 	  else
 	    {
@@ -11052,8 +11053,8 @@ expand_expr_real_1 (tree exp, rtx target, machine_mode tmode,
 	      op1 =
 		expand_expr (TREE_IMAGPART (exp), itarg, mode, EXPAND_NORMAL);
 
-	      write_complex_part (original_target, op0, REAL_P);
-	      write_complex_part (original_target, op1, IMAG_P);
+	      write_complex_part (original_target, op0, REAL_P, false);
+	      write_complex_part (original_target, op1, IMAG_P, false);
 
 	      return original_target;
 	    }
@@ -11066,7 +11067,7 @@ expand_expr_real_1 (tree exp, rtx target, machine_mode tmode,
 	    expand_expr (TREE_COMPLEX_BOTH_PARTS (exp), original_target, mode,
 			 EXPAND_NORMAL);
 	  rtx tmp = gen_reg_rtx (mode);
-	  write_complex_part (tmp, op0, BOTH_P);
+	  write_complex_part (tmp, op0, BOTH_P, false);
 	  return tmp;
 	}
 

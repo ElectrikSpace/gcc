@@ -192,11 +192,15 @@ gen_int_libfunc (optab optable, const char *opname, char suffix,
   scalar_int_mode int_mode;
   complex_mode cplx_int_mode;
   int bitsize;
+  bool cplx = false;
 
   if (is_int_mode (mode, &int_mode))
     bitsize = GET_MODE_BITSIZE (int_mode);
   else if (is_complex_int_mode (mode, &cplx_int_mode))
+  {
+    cplx = true;
     bitsize = GET_MODE_BITSIZE (cplx_int_mode);
+  }
   else
     return;
 
@@ -212,7 +216,7 @@ gen_int_libfunc (optab optable, const char *opname, char suffix,
 
   if (GET_MODE_CLASS (mode) == MODE_INT)
     gen_libfunc (optable, opname, suffix, int_mode);
-  else
+  else if (cplx)
     gen_libfunc (optable, opname, suffix, cplx_int_mode);
 }
 

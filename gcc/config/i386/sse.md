@@ -30122,36 +30122,36 @@
   }
 )
 
-(define_expand "mulsc3"
-  [(match_operand:SC 0 "register_operand" "=r")
-   (match_operand:SC 1 "register_operand" "r")
-   (match_operand:SC 2 "register_operand" "r")]
-  ""
-  {
-    rtx a = gen_reg_rtx (V4SFmode);
-    rtx b = gen_reg_rtx (V4SFmode);
-    emit_insn (gen_sse_shufps (a, 
-                                    simplify_gen_subreg (V4SFmode, operands[1], SCmode, 0),
-                                    simplify_gen_subreg (V4SFmode, operands[1], SCmode, 0),
-                                    GEN_INT (0b01000100)));
-
-    emit_insn (gen_sse_shufps (b, 
-                                    simplify_gen_subreg (V4SFmode, operands[2], SCmode, 0),
-                                    simplify_gen_subreg (V4SFmode, operands[2], SCmode, 0),
-                                    GEN_INT (0b00010100)));
-    emit_insn (gen_mulv4sf3 (a, a, b));
-    emit_insn (gen_sse_shufps (b, 
-                                    a,
-                                    a,
-                                    GEN_INT (0b00001101)));
-    emit_insn (gen_sse_shufps (a, 
-                                    a,
-                                    a,
-                                    GEN_INT (0b00001000)));
-    emit_insn (gen_vec_addsubv4sf3 (simplify_gen_subreg (V4SFmode, operands[0], SCmode, 0), a, b)); 
-    DONE;
-  }
-)
+;;(define_expand "mulsc3"
+;;  [(match_operand:SC 0 "register_operand" "=r")
+;;   (match_operand:SC 1 "register_operand" "r")
+;;   (match_operand:SC 2 "register_operand" "r")]
+;;  ""
+;;  {
+;;    rtx a = gen_reg_rtx (V4SFmode);
+;;    rtx b = gen_reg_rtx (V4SFmode);
+;;    emit_insn (gen_sse_shufps (a,
+;;                                    simplify_gen_subreg (V4SFmode, operands[1], SCmode, 0),
+;;                                    simplify_gen_subreg (V4SFmode, operands[1], SCmode, 0),
+;;                                    GEN_INT (0b01000100)));
+;;
+;;    emit_insn (gen_sse_shufps (b,
+;;                                    simplify_gen_subreg (V4SFmode, operands[2], SCmode, 0),
+;;                                    simplify_gen_subreg (V4SFmode, operands[2], SCmode, 0),
+;;                                    GEN_INT (0b00010100)));
+;;    emit_insn (gen_mulv4sf3 (a, a, b));
+;;    emit_insn (gen_sse_shufps (b,
+;;                                    a,
+;;                                    a,
+;;                                    GEN_INT (0b00001101)));
+;;    emit_insn (gen_sse_shufps (a,
+;;                                    a,
+;;                                    a,
+;;                                    GEN_INT (0b00001000)));
+;;    emit_insn (gen_vec_addsubv4sf3 (simplify_gen_subreg (V4SFmode, operands[0], SCmode, 0), a, b));
+;;    DONE;
+;;  }
+;;)
 
 (define_expand "conjsc2"
   [(match_operand:SC 0 "register_operand" "=r")

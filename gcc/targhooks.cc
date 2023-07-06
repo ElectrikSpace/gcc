@@ -1642,7 +1642,7 @@ default_read_complex_part (rtx cplx, complex_part_t part)
    BOTH_P, call recursively with REAL_P and IMAG_P  */
 
 void
-default_write_complex_part (rtx cplx, rtx val, complex_part_t part)
+default_write_complex_part (rtx cplx, rtx val, complex_part_t part, bool undefined_p)
 {
   machine_mode cmode;
   scalar_mode imode;
@@ -1650,8 +1650,8 @@ default_write_complex_part (rtx cplx, rtx val, complex_part_t part)
 
   if (part == BOTH_P)
     {
-      write_complex_part (cplx, read_complex_part (val, REAL_P), REAL_P);
-      write_complex_part (cplx, read_complex_part (val, IMAG_P), IMAG_P);
+      write_complex_part (cplx, read_complex_part (val, REAL_P), REAL_P, false);
+      write_complex_part (cplx, read_complex_part (val, IMAG_P), IMAG_P, false);
       return;
     }
 
@@ -1704,7 +1704,7 @@ default_write_complex_part (rtx cplx, rtx val, complex_part_t part)
     }
 
   store_bit_field (cplx, ibitsize, (part == IMAG_P) ? ibitsize : 0, 0, 0,
-		   imode, val, false);
+		   imode, val, false, undefined_p);
 }
 
 /* By default do not split reductions further.  */

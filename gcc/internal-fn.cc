@@ -2837,8 +2837,8 @@ expand_UADDC (internal_fn ifn, gcall *stmt)
   create_input_operand (&ops[3], op2, mode);
   create_input_operand (&ops[4], op3, mode);
   expand_insn (icode, 5, ops);
-  write_complex_part (target, re, false, false);
-  write_complex_part (target, im, true, false);
+  write_complex_part (target, re, REAL_P, false);
+  write_complex_part (target, im, IMAG_P, false);
 }
 
 /* Expand USUBC STMT.  */

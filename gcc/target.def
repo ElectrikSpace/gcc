@@ -3370,7 +3370,7 @@ DEFHOOK
  "This hook should move the rtx value given by @var{val} to the specified @var{var} of the complex given by @var{cplx}.\n\
   @var{var} can be the real part, the imaginary part, or both of them.",
  void,
- (rtx cplx, rtx val, complex_part_t part),
+ (rtx cplx, rtx val, complex_part_t part, bool undefined_p),
  default_write_complex_part)
 
 /* Support for named address spaces.  */

@@ -4616,7 +4616,7 @@ This hook should return the rtx representing the specified @var{part} of the com
   @var{part} can be the real part, the imaginary part, or both of them.
 @end deftypefn
 
-@deftypefn {Target Hook} void TARGET_WRITE_COMPLEX_PART (rtx @var{cplx}, rtx @var{val}, complex_part_t @var{part})
+@deftypefn {Target Hook} void TARGET_WRITE_COMPLEX_PART (rtx @var{cplx}, rtx @var{val}, complex_part_t @var{part}, bool @var{undefined_p})
 This hook should move the rtx value given by @var{val} to the specified @var{var} of the complex given by @var{cplx}.
   @var{var} can be the real part, the imaginary part, or both of them.
 @end deftypefn

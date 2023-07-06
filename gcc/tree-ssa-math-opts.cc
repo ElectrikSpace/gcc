@@ -3291,7 +3291,7 @@ last_fma_candidate_feeds_initial_phi (fma_deferring_state *state,
 static void
 convert_crot_1 (tree crot_result, tree op1, internal_fn cadd_fn)
 {
-  tree type = TREE_TYPE (crot_result);
+  //tree type = TREE_TYPE (crot_result);
   gimple *use_stmt;
   imm_use_iterator imm_iter;
   gcall *cadd_stmt;
