@@ -110,6 +110,7 @@ extern const unsigned char mode_class[NUM_MACHINE_MODES];
    || GET_MODE_CLASS (MODE) == MODE_PARTIAL_INT \
    || GET_MODE_CLASS (MODE) == MODE_COMPLEX_INT \
    || GET_MODE_CLASS (MODE) == MODE_VECTOR_BOOL \
+   || GET_MODE_CLASS (MODE) == MODE_VECTOR_COMPLEX_INT \
    || GET_MODE_CLASS (MODE) == MODE_VECTOR_INT)
 
 /* Nonzero if MODE is a floating-point mode.  */
@@ -117,11 +118,22 @@ extern const unsigned char mode_class[NUM_MACHINE_MODES];
   (GET_MODE_CLASS (MODE) == MODE_FLOAT	\
    || GET_MODE_CLASS (MODE) == MODE_DECIMAL_FLOAT \
    || GET_MODE_CLASS (MODE) == MODE_COMPLEX_FLOAT \
+   || GET_MODE_CLASS (MODE) == MODE_VECTOR_COMPLEX_FLOAT \
    || GET_MODE_CLASS (MODE) == MODE_VECTOR_FLOAT)
+
+#define COMPLEX_INT_MODE_P(MODE)   	\
+  (GET_MODE_CLASS (MODE) == MODE_VECTOR_COMPLEX_INT \
+   || GET_MODE_CLASS (MODE) == MODE_COMPLEX_INT)
+
+#define COMPLEX_FLOAT_MODE_P(MODE)		\
+   (GET_MODE_CLASS (MODE) == MODE_VECTOR_COMPLEX_FLOAT \
+    || GET_MODE_CLASS (MODE) == MODE_COMPLEX_FLOAT)
 
 /* Nonzero if MODE is a complex mode.  */
 #define COMPLEX_MODE_P(MODE)			\
   (GET_MODE_CLASS (MODE) == MODE_COMPLEX_INT	\
+   || GET_MODE_CLASS (MODE) == MODE_VECTOR_COMPLEX_INT	\
+   || GET_MODE_CLASS (MODE) == MODE_VECTOR_COMPLEX_FLOAT	\
    || GET_MODE_CLASS (MODE) == MODE_COMPLEX_FLOAT)
 
 /* Nonzero if MODE is a vector mode.  */
@@ -132,6 +144,8 @@ extern const unsigned char mode_class[NUM_MACHINE_MODES];
    || GET_MODE_CLASS (MODE) == MODE_VECTOR_FRACT	\
    || GET_MODE_CLASS (MODE) == MODE_VECTOR_UFRACT	\
    || GET_MODE_CLASS (MODE) == MODE_VECTOR_ACCUM	\
+   || GET_MODE_CLASS (MODE) == MODE_VECTOR_COMPLEX_INT	\
+   || GET_MODE_CLASS (MODE) == MODE_VECTOR_COMPLEX_FLOAT	\
    || GET_MODE_CLASS (MODE) == MODE_VECTOR_UACCUM)
 
 /* Nonzero if MODE is a scalar integral mode.  */
@@ -921,6 +935,9 @@ extern opt_machine_mode bitwise_mode_for_mode (machine_mode);
 extern opt_machine_mode mode_for_vector (scalar_mode, poly_uint64);
 extern opt_machine_mode related_vector_mode (machine_mode, scalar_mode,
 					     poly_uint64 = 0);
+extern opt_machine_mode mode_for_vector (complex_mode, poly_uint64);
+extern opt_machine_mode related_vector_mode (machine_mode,
+					     complex_mode, poly_uint64 = 0);
 extern opt_machine_mode related_int_vector_mode (machine_mode);
 
 /* A class for iterating through possible bitfield modes.  */

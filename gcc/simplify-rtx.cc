@@ -2653,6 +2653,10 @@ simplify_context::simplify_binary_operation (rtx_code code, machine_mode mode,
   gcc_assert (GET_RTX_CLASS (code) != RTX_COMPARE);
   gcc_assert (GET_RTX_CLASS (code) != RTX_COMM_COMPARE);
 
+  /* FIXME */
+  if (VECTOR_MODE_P (mode) && COMPLEX_MODE_P (mode))
+    return NULL_RTX;
+
   /* Make sure the constant is second.  */
   if (GET_RTX_CLASS (code) == RTX_COMM_ARITH
       && swap_commutative_operands_p (op0, op1))

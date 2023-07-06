@@ -394,13 +394,13 @@ flip_storage_order (machine_mode mode, rtx x)
 
   if (COMPLEX_MODE_P (mode))
     {
-      rtx real = read_complex_part (x, false);
-      rtx imag = read_complex_part (x, true);
+      rtx real = read_complex_part (x, REAL_P);
+      rtx imag = read_complex_part (x, IMAG_P);
 
       real = flip_storage_order (GET_MODE_INNER (mode), real);
       imag = flip_storage_order (GET_MODE_INNER (mode), imag);
 
-      return gen_rtx_CONCAT (mode, real, imag);
+      return targetm.gen_rtx_complex (mode, real, imag);
     }
 
   if (UNLIKELY (reverse_storage_order_supported < 0))
