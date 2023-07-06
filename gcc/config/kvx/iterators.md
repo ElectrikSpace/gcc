@@ -7,6 +7,9 @@
   (SF "w")
   (HC "w")
   (DI "d")
+  (CQI "h")
+  (CHI "w")
+  (CSI "d")
   (DF "d")
   (SC "d")
   (TI "q")
@@ -41,6 +44,9 @@
   (SI "wz")
   (SF "wz")
   (HC "wz")
+  (CQI "hz")
+  (CHI "wz")
+  (CSI "d")
   (DI "d")
   (DF "d")
   (SC "d")
@@ -342,8 +348,8 @@
 
 ;; Scalar modes used by the mov pattern that fit in a register.
 ;; TI and OI and to be handled elsewhere.
-;; (define_mode_iterator ALLIF [QI HI HF SI SF DI DF HC SC])
-(define_mode_iterator ALLIF [QI HI HF SI SF DI DF])
+;; (define_mode_iterator ALLIF [QI HI HF SI SF DI DF HC SC CQI CHI CSI])
+(define_mode_iterator ALLIF [QI HI HF SI SF DI DF HC SC CQI CHI CSI])
 
 ;; Attribute for ALLIF copies (COPYW, COPYD, COPYQ, COPYO).
 (define_mode_attr copyx [
@@ -357,7 +363,11 @@
   (HC "w")
   (SC "d")
   (TI "q")
+  (DC "q")
   (OI "o")
+  (CHI "w")
+  (CQI "w")
+  (CSI "d")
 ])
 
 (define_mode_iterator ALLP [SI DI])
@@ -373,10 +383,10 @@
 ;; for valid pointer modes: SI or DI. Anything else is an error.
 ;; Values 999 are used for modes where the alternative must always be disabled.
 (define_mode_attr symlen1 [
-  (SI "_x") (DI "_y") (QI "") (HI "") (HF "") (SF "") (DF "") (HC "") (SC "")
+  (SI "_x") (DI "_y") (QI "") (HI "") (HF "") (SF "") (DF "") (HC "") (SC "") (CQI "") (CHI "") (CSI "")
 ])
 (define_mode_attr symlen2 [
-  (SI "8") (DI "12") (QI "999") (HI "999") (HF "999") (SF "999") (DF "999") (HC "999") (SC "999")
+  (SI "8") (DI "12") (QI "999") (HI "999") (HF "999") (SF "999") (DF "999") (HC "999") (SC "999") (CQI "999") (CHI "999") (CSI "999")
 ])
 
 (define_attr "disabled" "yes,no" (const_string "no"))
@@ -418,14 +428,14 @@
 
 ;; Iterator for the modes that fit in a GPR.
 (define_mode_iterator FITGPR [
-  QI HI HF SI SF DI DF HC SC
-  V8QI V4HI V4HF V2SI V2SF
+  QI HI HF SI SF DI DF HC SC CQI CHI CSI
+  V8QI V4HI V4HF V2SI V2SF V4CQI V2CHI
 ])
 
 ;; Iterator for all 64-bit modes.
 (define_mode_iterator ALL64 [
   DI DF SC
-  V8QI V4HI V4HF V2SI V2SF V1DI
+  V8QI V4HI V4HF V2SI V2SF V1DI V4CQI V2CHI
 ])
 
 ;; Iterator for the 8-bit x8 vector modes.
@@ -448,10 +458,27 @@
   V8QI V4HI V4HF V2SI V2SF V1DI
 ])
 
+(define_mode_iterator SIMD64_CPLX [
+  V8QI V4HI V4HF V2SI V2SF V1DI
+  V2CHI V4CQI
+])
+
 ;; Iterator for all 128-bit modes.
 (define_mode_iterator ALL128 [
   TI
   V16QI V8HI V8HF V4SI V2DI V4SF V2DF
+])
+
+;; Iterator for the 128-bit vector modes.
+(define_mode_iterator ALL128_CPLX [
+  TI
+  V16QI V8HI V8HF V4SI V2DI V4SF V2DF
+  V4CHI V8CQI V2SC V2CSI
+])
+
+;; Iterator for the 128-bit vector modes.
+(define_mode_iterator SIMD128_CPLX [
+  V4CHI V8CQI V2SC V2CSI
 ])
 
 ;; Iterator for the 128-bit vector modes.
@@ -503,6 +530,7 @@
   V16QI V8HI V4SI V2DI
   V32QI V16HI V8SI V4DI
   V64QI V32HI V16SI V8DI
+  CQI CHI CSI CDI SC DC
 ])
 
 ;; Iterator for all modes (integer, float, vector) for MOV*CC.

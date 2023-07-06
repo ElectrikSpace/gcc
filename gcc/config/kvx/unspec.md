@@ -109,6 +109,7 @@
         UNSPEC_FLOW
         UNSPEC_FRSR
         UNSPEC_FDOT2
+        UNSPEC_DOT2
 
         UNSPEC_FADD
         UNSPEC_FSBF
@@ -123,6 +124,8 @@
         UNSPEC_FFMSX
 
         UNSPEC_FMM
+        UNSPEC_MM
+        UNSPEC_ADDRWPD
         UNSPEC_FMMA
         UNSPEC_FMMS
         UNSPEC_FFDMA
@@ -137,6 +140,7 @@
         UNSPEC_FIXED
         UNSPEC_FIXEDU
 
+        UNSPEC_CROT90
         UNSPEC_FCONJ
         UNSPEC_FCDIV
         UNSPEC_FSDIV
