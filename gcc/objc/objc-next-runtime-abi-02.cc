@@ -1690,7 +1690,9 @@ build_v2_objc_method_fixup_call (int super_flag, tree method_prototype,
 #else
       ret_val = build_conditional_expr (input_location,
 					ifexp, 0,
-					ret_val, NULL_TREE, input_location, false);
+					ret_val, NULL_TREE, input_location,
+					ftree, NULL_TREE, input_location,
+					false);
       ret_val = fold_convert (ret_type, ret_val);
 #endif
     }
@@ -1800,12 +1802,8 @@ build_v2_build_objc_method_call (int super, tree method_prototype,
 #else
       ret_val = build_conditional_expr (loc, ifexp, 1,
 					ret_val, NULL_TREE, loc,
-<<<<<<< HEAD:gcc/objc/objc-next-runtime-abi-02.cc
-					ftree, NULL_TREE, loc);
-      ret_val = fold_convert (ret_type, ret_val);
-=======
 					ftree, NULL_TREE, loc, false);
->>>>>>> 14ed4f70f40 ([GENERIC, ObjC] build_cond_expr):gcc/objc/objc-next-runtime-abi-02.c
+      ret_val = fold_convert (ret_type, ret_val);
 #endif
     }
   return ret_val;

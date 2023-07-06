@@ -2514,6 +2514,14 @@ build_complex (tree type, tree real, tree imag)
 
   tree t = make_node (COMPLEX_CST);
 
+  /* represent both parts as a constant vector */
+  tree vector_type = build_vector_type (TREE_TYPE (real), 2);
+  tree_vector_builder v (vector_type, 1, 2);
+  v.quick_push (real);
+  v.quick_push (imag);
+  tree both = v.build ();
+
+  TREE_COMPLEX_BOTH_PARTS (t) = both;
   TREE_REALPART (t) = real;
   TREE_IMAGPART (t) = imag;
   TREE_TYPE (t) = type ? type : build_complex_type (TREE_TYPE (real));
@@ -10002,6 +10010,8 @@ build_vector_type_for_mode (tree innertype, machine_mode mode)
     case MODE_VECTOR_UFRACT:
     case MODE_VECTOR_ACCUM:
     case MODE_VECTOR_UACCUM:
+    case MODE_VECTOR_COMPLEX_INT:
+    case MODE_VECTOR_COMPLEX_FLOAT:
       nunits = GET_MODE_NUNITS (mode);
       break;
 

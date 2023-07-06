@@ -3248,15 +3248,20 @@ match_pattern (optab_pattern *p, const char *name, const char *pat)
 		    break;
 		if (*p == 0
 		    && (! force_int || mode_class[i] == MODE_INT
+			|| mode_class[i] == MODE_COMPLEX_INT
+			|| mode_class[i] == MODE_VECTOR_COMPLEX_INT
 			|| mode_class[i] == MODE_VECTOR_INT)
 		    && (! force_partial_int
 			|| mode_class[i] == MODE_INT
+			|| mode_class[i] == MODE_COMPLEX_INT
+			|| mode_class[i] == MODE_VECTOR_COMPLEX_INT
 			|| mode_class[i] == MODE_PARTIAL_INT
 			|| mode_class[i] == MODE_VECTOR_INT)
 		    && (! force_float
 			|| mode_class[i] == MODE_FLOAT
 			|| mode_class[i] == MODE_DECIMAL_FLOAT
 			|| mode_class[i] == MODE_COMPLEX_FLOAT
+			|| mode_class[i] == MODE_VECTOR_COMPLEX_FLOAT
 			|| mode_class[i] == MODE_VECTOR_FLOAT)
 		    && (! force_fixed
 			|| mode_class[i] == MODE_FRACT
