@@ -3879,7 +3879,7 @@ emit_move_complex (machine_mode mode, rtx x, rtx y)
     try_int = false;
   else if (GET_MODE_CLASS (mode) == MODE_COMPLEX_FLOAT
       && optab_handler (mov_optab, GET_MODE_INNER (mode)) != CODE_FOR_nothing
-      && optab_handler (mov_optab, imode) == CODE_FOR_nothing
+      && optab_handler (mov_optab, mode) != CODE_FOR_nothing
       && !(REG_P (x) && HARD_REGISTER_P (x))
       && !(REG_P (y) && HARD_REGISTER_P (y)))
     try_int = false;
