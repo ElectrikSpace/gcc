@@ -18,7 +18,6 @@
 ;; <http://www.gnu.org/licenses/>.
 
 (define_c_enum "unspec" [
-/bin/bash: q: command not found
   UNSPEC_MOVNT
 
   ;; SSE2
@@ -30074,39 +30073,23 @@
   [(set_attr "prefix" "vex")
    (set_attr "mode" "<sseinsnmode>")])
 
-;;(define_expand "movsc"
-;;  [(match_operand:SC 0 "nonimmediate_operand" "")
-;;   (match_operand:SC 1 "nonimmediate_operand" "")]
-;;  ""
-;;  {
-;;    emit_insn (gen_movv2sf (simplify_gen_subreg (V2SFmode, operands[0], SCmode, 0),
-;;			    simplify_gen_subreg (V2SFmode, operands[1], SCmode, 0)));
-;;    DONE;
-;;  }
-;;)
-
-;;(define_expand "movsc"
-;;  [(match_operand:SC 0 "nonimmediate_operand" "")
-;;   (match_operand:SC 1 "nonimmediate_operand" "")]
-;;  ""
-;;  {
-;;    emit_insn (gen_movdf (simplify_gen_subreg (DFmode, operands[0], SCmode, 0),
-;;			    simplify_gen_subreg (DFmode, operands[1], SCmode, 0)));
-;;    DONE;
-;;  }
-;;)
-
-(define_expand "addsc3"
-  [(match_operand:SC 0 "register_operand" "=r")
-   (match_operand:SC 1 "register_operand" "r")
-   (match_operand:SC 2 "register_operand" "r")]
+(define_expand "movsc"
+  [(match_operand:SC 0 "nonimmediate_operand" "")
+   (match_operand:SC 1 "nonimmediate_operand" "")]
   ""
   {
-    emit_insn (gen_addv2sf3 (simplify_gen_subreg (V2SFmode, operands[0], SCmode, 0),
-			     simplify_gen_subreg (V2SFmode, operands[1], SCmode, 0),
-			     simplify_gen_subreg (V2SFmode, operands[2], SCmode, 0)));
+    emit_insn (gen_movv2sf (simplify_gen_subreg (V2SFmode, operands[0], SCmode, 0),
+			    simplify_gen_subreg (V2SFmode, operands[1], SCmode, 0)));
     DONE;
   }
+)
+
+(define_insn "addsc3"
+  [(set (match_operand:SC 0 "register_operand" "=v")
+        (plus:SC (match_operand:SC 1 "register_operand" "v")
+		 (match_operand:SC 2 "register_operand" "v")))]
+  "TARGET_AVX"
+  "vaddps\t%1, %2, %0"
 )
 
 (define_expand "subsc3"

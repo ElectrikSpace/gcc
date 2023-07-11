@@ -2339,8 +2339,8 @@ classify_argument (machine_mode mode, const_tree type,
 	mode_alignment = 128;
       else if (mode == XCmode)
 	mode_alignment = 256;
-      if (COMPLEX_MODE_P (mode))
-	mode_alignment /= 2;
+      /*if (COMPLEX_MODE_P (mode))
+	mode_alignment /= 2;*/
       /* Misaligned fields are always returned in memory.  */
       if (bit_offset % mode_alignment)
 	return 0;
@@ -3007,6 +3007,7 @@ pass_in_reg:
     case E_V4BFmode:
     case E_V2SImode:
     case E_V2SFmode:
+    case E_SCmode:
     case E_V1TImode:
     case E_V1DImode:
       if (!type || !AGGREGATE_TYPE_P (type))
@@ -3257,6 +3258,7 @@ pass_in_reg:
     case E_V4BFmode:
     case E_V2SImode:
     case E_V2SFmode:
+    case E_SCmode:
     case E_V1TImode:
     case E_V1DImode:
       if (!type || !AGGREGATE_TYPE_P (type))
@@ -4158,8 +4160,8 @@ function_value_ms_64 (machine_mode orig_mode, machine_mode mode,
 	      && !INTEGRAL_TYPE_P (valtype)
 	      && !VECTOR_FLOAT_TYPE_P (valtype))
 	    break;
-	  if ((SCALAR_INT_MODE_P (mode) || VECTOR_MODE_P (mode))
-	      && !COMPLEX_MODE_P (mode))
+	  if ((SCALAR_INT_MODE_P (mode) || VECTOR_MODE_P (mode)))
+	     // && !COMPLEX_MODE_P (mode))
 	    regno = FIRST_SSE_REG;
 	  break;
 	case 8:
@@ -4266,7 +4268,7 @@ ix86_return_in_memory (const_tree type, const_tree fntype ATTRIBUTE_UNUSED)
 	       || INTEGRAL_TYPE_P (type)
 	       || VECTOR_FLOAT_TYPE_P (type))
 	      && (SCALAR_INT_MODE_P (mode) || VECTOR_MODE_P (mode))
-	      && !COMPLEX_MODE_P (mode)
+	      //&& !COMPLEX_MODE_P (mode)
 	      && (GET_MODE_SIZE (mode) == 16 || size == 16))
 	    return false;
 
@@ -15722,6 +15724,7 @@ ix86_build_const_vector (machine_mode mode, bool vect, rtx value)
     case E_V8SFmode:
     case E_V4SFmode:
     case E_V2SFmode:
+    case E_SCmode:
     case E_V8DFmode:
     case E_V4DFmode:
     case E_V2DFmode:
@@ -15770,6 +15773,7 @@ ix86_build_signbit_mask (machine_mode mode, bool vect, bool invert)
     case E_V8SFmode:
     case E_V4SFmode:
     case E_V2SFmode:
+    case E_SCmode:
     case E_V2SImode:
       vec_mode = mode;
       imode = SImode;
@@ -19452,7 +19456,8 @@ ix86_register_priority (int hard_regno)
     return 1;
   /* Usage of AX register results in smaller code.  Prefer it.  */
   if (hard_regno == AX_REG)
-    return 4;
+    return 0;
+    //return 4;
   return 3;
 }
 
@@ -19821,7 +19826,8 @@ ix86_class_max_nregs (reg_class_t rclass, machine_mode mode)
   else
     {
       if (COMPLEX_MODE_P (mode))
-	return 2;
+	return CEIL (GET_MODE_SIZE (mode), UNITS_PER_WORD);
+	//return 2;
       else
 	return 1;
     }
@@ -20157,7 +20163,8 @@ ix86_hard_regno_nregs (unsigned int regno, machine_mode mode)
       return CEIL (GET_MODE_SIZE (mode), UNITS_PER_WORD);
     }
   if (COMPLEX_MODE_P (mode))
-    return 2;
+    return 1;
+    //return 2;
   /* Register pair for mask registers.  */
   if (mode == P2QImode || mode == P2HImode)
     return 2;

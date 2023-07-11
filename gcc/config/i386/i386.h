@@ -1054,7 +1054,8 @@ extern const char *host_detect_local_cpu (int argc, const char **argv);
    || (MODE) == V4QImode || (MODE) == V2HImode || (MODE) == V1SImode	\
    || (MODE) == V2DImode || (MODE) == V2QImode				\
    || (MODE) == DFmode	|| (MODE) == DImode				\
-   || (MODE) == HFmode || (MODE) == BFmode)
+   || (MODE) == HFmode || (MODE) == BFmode				\
+   || (MODE) == SCmode)
 
 #define VALID_SSE_REG_MODE(MODE)					\
   ((MODE) == V1TImode || (MODE) == TImode				\
@@ -1063,7 +1064,7 @@ extern const char *host_detect_local_cpu (int argc, const char **argv);
    || (MODE) == TFmode || (MODE) == TDmode)
 
 #define VALID_MMX_REG_MODE_3DNOW(MODE) \
-  ((MODE) == V2SFmode || (MODE) == SFmode)
+  ((MODE) == V2SFmode || (MODE) == SFmode || (MODE) == SCmode)
 
 /* To match ia32 psABI, V4HFmode should be added here.  */
 #define VALID_MMX_REG_MODE(MODE)					\
@@ -1106,13 +1107,15 @@ extern const char *host_detect_local_cpu (int argc, const char **argv);
    || (MODE) == V16SImode || (MODE) == V32HImode || (MODE) == V8DFmode	\
    || (MODE) == V16SFmode \
    || (MODE) == V32HFmode || (MODE) == V16HFmode || (MODE) == V8HFmode  \
-   || (MODE) == V32BFmode || (MODE) == V16BFmode || (MODE) == V8BFmode)
+   || (MODE) == V32BFmode || (MODE) == V16BFmode || (MODE) == V8BFmode	\
+   || (MODE) == SCmode)
 
 #define X87_FLOAT_MODE_P(MODE)	\
   (TARGET_80387 && ((MODE) == SFmode || (MODE) == DFmode || (MODE) == XFmode))
 
 #define SSE_FLOAT_MODE_P(MODE) \
-  ((TARGET_SSE && (MODE) == SFmode) || (TARGET_SSE2 && (MODE) == DFmode))
+  ((TARGET_SSE && (MODE) == SFmode) || (TARGET_SSE2 && (MODE) == DFmode) \
+   || (TARGET_SSE2 && (MODE) == SCmode))
 
 #define SSE_FLOAT_MODE_SSEMATH_OR_HF_P(MODE)				\
   ((SSE_FLOAT_MODE_P (MODE) && TARGET_SSE_MATH)				\
