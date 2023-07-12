@@ -119,6 +119,12 @@ extern const unsigned char mode_class[NUM_MACHINE_MODES];
    || GET_MODE_CLASS (MODE) == MODE_COMPLEX_FLOAT \
    || GET_MODE_CLASS (MODE) == MODE_VECTOR_FLOAT)
 
+#define COMPLEX_INT_MODE_P(MODE) \
+   (GET_MODE_CLASS (MODE) == MODE_COMPLEX_INT)
+
+#define COMPLEX_FLOAT_MODE_P(MODE) \
+  (GET_MODE_CLASS (MODE) == MODE_COMPLEX_FLOAT)
+
 /* Nonzero if MODE is a complex mode.  */
 #define COMPLEX_MODE_P(MODE)			\
   (GET_MODE_CLASS (MODE) == MODE_COMPLEX_INT	\
