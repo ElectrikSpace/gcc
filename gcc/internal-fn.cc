@@ -914,9 +914,9 @@ expand_arith_set_overflow (tree lhs, rtx target)
 {
   if (TYPE_PRECISION (TREE_TYPE (TREE_TYPE (lhs))) == 1
       && !TYPE_UNSIGNED (TREE_TYPE (TREE_TYPE (lhs))))
-    write_complex_part (target, constm1_rtx, true, false);
+    write_complex_part (target, constm1_rtx, IMAG_P, false);
   else
-    write_complex_part (target, const1_rtx, true, false);
+    write_complex_part (target, const1_rtx, IMAG_P, false);
 }
 
 /* Helper for expand_*_overflow.  Store RES into the __real__ part
@@ -971,7 +971,7 @@ expand_arith_overflow_result_store (tree lhs, rtx target,
       expand_arith_set_overflow (lhs, target);
       emit_label (done_label);
     }
-  write_complex_part (target, lres, false, false);
+  write_complex_part (target, lres, REAL_P, false);
 }
 
 /* Helper for expand_*_overflow.  Store RES into TARGET.  */
@@ -1016,7 +1016,7 @@ expand_addsub_overflow (location_t loc, tree_code code, tree lhs,
     {
       target = expand_expr (lhs, NULL_RTX, VOIDmode, EXPAND_WRITE);
       if (!is_ubsan)
-	write_complex_part (target, const0_rtx, true, false);
+	write_complex_part (target, const0_rtx, IMAG_P, false);
     }
 
   /* We assume both operands and result have the same precision
@@ -1461,7 +1461,7 @@ expand_neg_overflow (location_t loc, tree lhs, tree arg1, bool is_ubsan,
     {
       target = expand_expr (lhs, NULL_RTX, VOIDmode, EXPAND_WRITE);
       if (!is_ubsan)
-	write_complex_part (target, const0_rtx, true, false);
+	write_complex_part (target, const0_rtx, IMAG_P, false);
     }
 
   enum insn_code icode = optab_handler (negv3_optab, mode);
@@ -1586,7 +1586,7 @@ expand_mul_overflow (location_t loc, tree lhs, tree arg0, tree arg1,
     {
       target = expand_expr (lhs, NULL_RTX, VOIDmode, EXPAND_WRITE);
       if (!is_ubsan)
-	write_complex_part (target, const0_rtx, true, false);
+	write_complex_part (target, const0_rtx, IMAG_P, false);
     }
 
   if (is_ubsan)
@@ -2403,7 +2403,7 @@ expand_mul_overflow (location_t loc, tree lhs, tree arg0, tree arg1,
       do_compare_rtx_and_jump (op1, res, NE, true, mode, NULL_RTX, NULL,
 			       all_done_label, profile_probability::very_unlikely ());
       emit_label (set_noovf);
-      write_complex_part (target, const0_rtx, true, false);
+      write_complex_part (target, const0_rtx, IMAG_P, false);
       emit_label (all_done_label);
     }
 
@@ -2672,7 +2672,7 @@ expand_arith_overflow (enum tree_code code, gimple *stmt)
 	{
 	  /* The infinity precision result will always fit into result.  */
 	  rtx target = expand_expr (lhs, NULL_RTX, VOIDmode, EXPAND_WRITE);
-	  write_complex_part (target, const0_rtx, true, false);
+	  write_complex_part (target, const0_rtx, IMAG_P, false);
 	  scalar_int_mode mode = SCALAR_INT_TYPE_MODE (type);
 	  struct separate_ops ops;
 	  ops.code = code;
@@ -2837,8 +2837,8 @@ expand_UADDC (internal_fn ifn, gcall *stmt)
   create_input_operand (&ops[3], op2, mode);
   create_input_operand (&ops[4], op3, mode);
   expand_insn (icode, 5, ops);
-  write_complex_part (target, re, false, false);
-  write_complex_part (target, im, true, false);
+  write_complex_part (target, re, REAL_P, false);
+  write_complex_part (target, im, IMAG_P, false);
 }
 
 /* Expand USUBC STMT.  */
