@@ -3812,6 +3812,7 @@ pass_forwprop::execute (function *fun)
 		}
 	      else
 		gsi_next (&gsi);
+	      gsi_next (&gsi);
 	    }
 	  else if (code == CONSTRUCTOR
 		   && VECTOR_TYPE_P (TREE_TYPE (rhs))

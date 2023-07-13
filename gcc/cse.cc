@@ -1313,7 +1313,7 @@ try_const_anchors (rtx src_const, machine_mode mode)
   unsigned lower_old, upper_old;
 
   /* CONST_INT may be in various modes, avoid non-scalar-int mode. */
-  if (!SCALAR_INT_MODE_P (mode))
+  if (!(SCALAR_INT_MODE_P (mode) || COMPLEX_INT_MODE_P (mode)))
     return NULL_RTX;
 
   if (!compute_const_anchors (src_const, &lower_base, &lower_offs,
